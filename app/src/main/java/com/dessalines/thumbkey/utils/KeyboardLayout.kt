@@ -401,4 +401,5 @@ enum class KeyboardLayout(
     RUHyper(KB_RU_HYPER),
     MYThumbKey(KB_MY_THUMBKEY),
     JAKanaStandard(KB_JA_KANA_STANDARD),
+    ENSideCar(KB_EN_SIDECAR_3X6)
 }
