@@ -95,6 +95,7 @@ import com.dessalines.thumbkey.keyboards.KB_EN_TWO_HANDS
 import com.dessalines.thumbkey.keyboards.KB_EN_TYPESPLIT
 import com.dessalines.thumbkey.keyboards.KB_EN_TYPESPLIT_PROGRAMMING
 import com.dessalines.thumbkey.keyboards.KB_EN_TYPESPLIT_SHORT
+import com.dessalines.thumbkey.keyboards.KB_EN_SIDECAR_3X6
 import com.dessalines.thumbkey.keyboards.KB_EO_CYRILLIC_THUMBKEY
 import com.dessalines.thumbkey.keyboards.KB_EO_EN_DE_THUMBKEY
 import com.dessalines.thumbkey.keyboards.KB_ES_CA_MESSAGEASE
