@@ -5,6 +5,7 @@ package com.dessalines.thumbkey.keyboards
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowDropDown
 import androidx.compose.material.icons.outlined.ArrowDropUp
+import androidx.compose.material.icons.outlined.EmojiEmotions
 import com.dessalines.thumbkey.utils.*
 import com.dessalines.thumbkey.utils.ColorVariant.*
 import com.dessalines.thumbkey.utils.FontSizeVariant.*
@@ -19,20 +20,45 @@ import com.dessalines.thumbkey.utils.SwipeNWay.*
  * Row 1: [shift ctrl] , i , t, space, a, d
  * Row 2: num, r, u, enter, h, l
  *
- * - Leftmost column is all control keys (emoji / shift / numeric).
+ * - Leftmost column is all control keys (emoji / shift / numeric), coloured grey.
  * - Swipes are inward-focused; no need to swipe off the screen edges.
  * - Letter swipes largely mirror Hyper-Space patterns, with adjustments.
+ * - Added parentheses: '(' on e-right, ')' on a-right (and same in shifted).
  */
 
-// Local copies of emoji / numeric keys without directional swipes
+// Emoji control key: grey, with inward utility swipes
 private val SIDECAR_EMOJI_KEY_ITEM =
     KeyItemC(
-        center = EMOJI_KEY_ITEM.center,
+        center =
+            KeyC(
+                display = KeyDisplay.IconDisplay(Icons.Outlined.EmojiEmotions),
+                action = ToggleEmojiMode,
+                color = MUTED,
+            ),
+        swipeType = FOUR_WAY_CROSS,
+        // Up: hide keyboard (inwards)
+        top = KeyC(HideKeyboard, color = MUTED),
+        // Right: voice input
+        right = KeyC(SwitchIMEVoice, color = MUTED),
+        // Down: switch IME
+        bottom = KeyC(SwitchIME, color = MUTED),
     )
 
+// Numeric control key: grey, with inward utility swipes
 private val SIDECAR_NUMERIC_KEY_ITEM =
     KeyItemC(
-        center = NUMERIC_KEY_ITEM.center,
+        center =
+            KeyC(
+                display = KeyDisplay.TextDisplay("123"),
+                action = ToggleNumericMode,
+                color = MUTED,
+            ),
+        swipeType = FOUR_WAY_CROSS,
+        // Up: hide keyboard (safe on bottom row since swipe is upwards)
+        top = KeyC(HideKeyboard, color = MUTED),
+        // Right: switch language/IME
+        right = KeyC(SwitchLanguage, color = MUTED),
+        // No left / bottom swipes here to avoid off-screen gestures
     )
 
 val KB_EN_SIDECAR_3X6_MAIN =
@@ -40,7 +66,7 @@ val KB_EN_SIDECAR_3X6_MAIN =
         listOf(
             // Row 0: emoji , o , e , backspace, s, n
             listOf(
-                // Leftmost: emoji control key (no swipes)
+                // Leftmost: emoji control key (grey, with inward utilities)
                 SIDECAR_EMOJI_KEY_ITEM,
 
                 // 'o' key: letter + shift control + 'k' swipe
@@ -65,13 +91,14 @@ val KB_EN_SIDECAR_3X6_MAIN =
                     right = KeyC("k"),
                 ),
 
-                // 'e' key with punctuation (from Hyper-Space)
+                // 'e' key with punctuation + left parenthesis on right
                 KeyItemC(
                     center = KeyC("e", size = LARGE),
                     swipeType = FOUR_WAY_CROSS,
                     left = KeyC(".", color = MUTED),
                     top = KeyC(",", color = MUTED),
                     bottom = KeyC("?", color = MUTED),
+                    right = KeyC("(", color = MUTED),
                 ),
 
                 // Backspace control key
@@ -86,25 +113,24 @@ val KB_EN_SIDECAR_3X6_MAIN =
                     top = KeyC("-", color = MUTED),
                 ),
 
-                // 'n' key: inward swipes only, now giving 'b' (down)
+                // 'n' key: inward 'b' on down swipe
                 KeyItemC(
                     center = KeyC("n", size = LARGE),
                     swipeType = FOUR_WAY_CROSS,
-                    // Right swipe removed (was 'b', off-screen)
                     bottom = KeyC("b"),
                 ),
             ),
 
             // Row 1: [shift ctrl] , i , t, space, a, d
             listOf(
-                // Left column: dedicated shift control (no left swipe)
+                // Left column: dedicated shift control (grey, no left swipe)
                 KeyItemC(
                     center =
                         KeyC(
                             display = KeyDisplay.IconDisplay(Icons.Outlined.ArrowDropUp),
                             action = ToggleShiftMode(true),
                             swipeReturnAction = ToggleCurrentWordCapitalization(true),
-                            color = MUTED, // grey control key
+                            color = MUTED,
                         ),
                     bottom =
                         KeyC(
@@ -115,7 +141,7 @@ val KB_EN_SIDECAR_3X6_MAIN =
                         ),
                 ),
 
-                // 'i' key with ' and ; and now 'g' (right) for inward swipe
+                // 'i' key with ' and ; and 'g' (right) for inward swipe
                 KeyItemC(
                     center = KeyC("i", size = LARGE),
                     swipeType = FOUR_WAY_CROSS,
@@ -124,7 +150,7 @@ val KB_EN_SIDECAR_3X6_MAIN =
                     right = KeyC("g"),
                 ),
 
-                // 't' key with p/w/m and now 'z' on left (inwards)
+                // 't' key with p/w/m and 'z' on left (inwards)
                 KeyItemC(
                     center = KeyC("t", size = LARGE),
                     swipeType = FOUR_WAY_CROSS,
@@ -137,15 +163,16 @@ val KB_EN_SIDECAR_3X6_MAIN =
                 // Spacebar
                 SPACEBAR_SKINNY_KEY_ITEM,
 
-                // 'a' key with j and ! (from Hyper-Space)
+                // 'a' key with j, !, and right parenthesis on right
                 KeyItemC(
                     center = KeyC("a", size = LARGE),
                     swipeType = FOUR_WAY_CROSS,
                     left = KeyC("j"),
                     bottom = KeyC("!", color = MUTED),
+                    right = KeyC(")", color = MUTED),
                 ),
 
-                // 'd' plain (no swipe; 'd' removed from 'n')
+                // 'd' plain
                 KeyItemC(
                     center = KeyC("d", size = LARGE),
                 ),
@@ -153,7 +180,7 @@ val KB_EN_SIDECAR_3X6_MAIN =
 
             // Row 2: num, r, u, enter, h, l
             listOf(
-                // Left column: numeric control key (no swipes)
+                // Left column: numeric control key (grey, with inward utilities)
                 SIDECAR_NUMERIC_KEY_ITEM,
 
                 // 'r' key with / and # (unchanged)
@@ -164,7 +191,7 @@ val KB_EN_SIDECAR_3X6_MAIN =
                     top = KeyC("#", color = MUTED),
                 ),
 
-                // 'u' key: inward x on TOP now, ` on right
+                // 'u' key: inward 'x' on top now, ` on right
                 KeyItemC(
                     center = KeyC("u", size = LARGE),
                     swipeType = FOUR_WAY_CROSS,
@@ -183,7 +210,7 @@ val KB_EN_SIDECAR_3X6_MAIN =
                     top = KeyC("v"),
                 ),
 
-                // 'l' key: 'y' is now inward (left), '@' moved to top
+                // 'l' key: 'y' inward (left), '@' up
                 KeyItemC(
                     center = KeyC("l", size = LARGE),
                     swipeType = FOUR_WAY_CROSS,
@@ -208,12 +235,14 @@ val KB_EN_SIDECAR_3X6_SHIFTED =
                     right = KeyC("K"),
                 ),
 
+                // 'E' key with punctuation + '(' on right
                 KeyItemC(
                     center = KeyC("E", size = LARGE),
                     swipeType = FOUR_WAY_CROSS,
                     left = KeyC(".", color = MUTED),
                     top = KeyC(",", color = MUTED),
                     bottom = KeyC("?", color = MUTED),
+                    right = KeyC("(", color = MUTED),
                 ),
 
                 BACKSPACE_KEY_ITEM,
@@ -272,11 +301,13 @@ val KB_EN_SIDECAR_3X6_SHIFTED =
 
                 SPACEBAR_SKINNY_KEY_ITEM,
 
+                // 'A' key with j, !, and ')' on right (mirroring main)
                 KeyItemC(
                     center = KeyC("A", size = LARGE),
                     swipeType = FOUR_WAY_CROSS,
                     left = KeyC("J"),
                     bottom = KeyC("!", color = MUTED),
+                    right = KeyC(")", color = MUTED),
                 ),
 
                 KeyItemC(
