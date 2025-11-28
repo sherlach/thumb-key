@@ -22,7 +22,7 @@ import com.dessalines.thumbkey.utils.SwipeNWay.*
  * - Leftmost column is all control keys (emoji / edit / numeric), coloured grey.
  * - Control column keeps useful swipes, but only in "inward" directions
  *   (no left swipe on col 0, no bottom swipe on bottom row).
- * - Letters + swipes + parentheses as previously designed.
+ * - Letters + swipes + parentheses as designed earlier.
  */
 
 // ---------------------------------------------------------------------
@@ -62,18 +62,16 @@ private val SIDECAR_NUMERIC_KEY_ITEM =
         longPress = Undo,         // long-press: undo
     )
 
-// Row-1 left control key: text-edit cluster (undo/redo/etc.)
+// Row-1 left control key: move-keyboard + undo/redo/select-all
 private val SIDECAR_EDIT_KEY_ITEM =
     KeyItemC(
         backgroundColor = SURFACE_VARIANT,
-        swipeType = EIGHT_WAY,
-        center = UNDO_KEYC,              // tap: undo
-        right = REDO_KEYC,               // right: redo
-        top = COPY_KEYC,                 // up: copy
-        bottom = PASTE_KEYC,             // down: paste
-        topRight = CUT_KEYC,             // up-right: cut
-        bottomRight = SELECT_ALL_KEYC,   // down-right: select all
-        // no left / topLeft / bottomLeft (would swipe off the screen)
+        swipeType = FOUR_WAY_CROSS,
+        center = MOVE_KEYBOARD_CYCLE_RIGHT_KEYC, // tap: cycle keyboard position
+        top = UNDO_KEYC,                         // up: undo
+        bottom = REDO_KEYC,                      // down: redo
+        right = SELECT_ALL_KEYC,                 // right: select all
+        // no left swipe (off-screen)
     )
 
 val KB_EN_SIDECAR_3X6_MAIN =
@@ -142,7 +140,7 @@ val KB_EN_SIDECAR_3X6_MAIN =
             // Row 1: [edit ctrl] , i , t, space, a, d
             // -----------------------------------------------------------------
             listOf(
-                // Left column: text-edit control cluster (undo/redo/etc.), grey
+                // Left column: edit control cluster (move + undo/redo/select-all), grey
                 SIDECAR_EDIT_KEY_ITEM,
 
                 // 'i' key with ' and ; and 'g' (right)
