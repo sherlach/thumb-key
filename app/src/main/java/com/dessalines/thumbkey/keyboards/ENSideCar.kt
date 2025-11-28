@@ -16,10 +16,10 @@ import com.dessalines.thumbkey.utils.SwipeNWay.*
  *
  * Grid:
  * Row 0: emoji , o , e , backspace, s, n
- * Row 1: [shift ctrl] , i , t, space, a, d
+ * Row 1: [edit ctrl] , i , t, space, a, d
  * Row 2: num, r, u, enter, h, l
  *
- * - Leftmost column is all control keys (emoji / shift / numeric), coloured grey.
+ * - Leftmost column is all control keys (emoji / edit / numeric), coloured grey.
  * - Control column keeps useful swipes, but only in "inward" directions
  *   (no left swipe on col 0, no bottom swipe on bottom row).
  * - Letters + swipes + parentheses as previously designed.
@@ -38,11 +38,11 @@ private val SIDECAR_EMOJI_KEY_ITEM =
             TOGGLE_EMOJI_MODE_TRUE_KEYC.copy(
                 color = MUTED,
             ),
-        top = GOTO_SETTINGS_KEYC,          // up: settings
-        right = SWITCH_LANGUAGE_KEYC,      // right: switch language
-        bottom = SWITCH_IME_KEYC,          // down: switch IME
-        topRight = MOVE_KEYBOARD_CYCLE_RIGHT_KEYC,  // up-right: move keyboard
-        bottomRight = SWITCH_IME_VOICE_KEYC,        // down-right: voice input
+        top = GOTO_SETTINGS_KEYC,                  // up: settings
+        right = SWITCH_LANGUAGE_KEYC,              // right: switch language
+        bottom = SWITCH_IME_KEYC,                  // down: switch IME
+        topRight = MOVE_KEYBOARD_CYCLE_RIGHT_KEYC, // up-right: move keyboard
+        bottomRight = SWITCH_IME_VOICE_KEYC,       // down-right: voice input
         // no left / topLeft / bottomLeft to avoid off-screen swipes
     )
 
@@ -58,8 +58,22 @@ private val SIDECAR_NUMERIC_KEY_ITEM =
         top = COPY_KEYC,          // up: copy
         right = PASTE_KEYC,       // right: paste
         topRight = CUT_KEYC,      // up-right: cut
-        // you could add more here if you’re okay with slight outward diagonals
+        // no left / bottom / bottomLeft / bottomRight, to avoid outward edges
         longPress = Undo,         // long-press: undo
+    )
+
+// Row-1 left control key: text-edit cluster (undo/redo/etc.)
+private val SIDECAR_EDIT_KEY_ITEM =
+    KeyItemC(
+        backgroundColor = SURFACE_VARIANT,
+        swipeType = EIGHT_WAY,
+        center = UNDO_KEYC,              // tap: undo
+        right = REDO_KEYC,               // right: redo
+        top = COPY_KEYC,                 // up: copy
+        bottom = PASTE_KEYC,             // down: paste
+        topRight = CUT_KEYC,             // up-right: cut
+        bottomRight = SELECT_ALL_KEYC,   // down-right: select all
+        // no left / topLeft / bottomLeft (would swipe off the screen)
     )
 
 val KB_EN_SIDECAR_3X6_MAIN =
@@ -125,27 +139,11 @@ val KB_EN_SIDECAR_3X6_MAIN =
             ),
 
             // -----------------------------------------------------------------
-            // Row 1: [shift ctrl] , i , t, space, a, d
+            // Row 1: [edit ctrl] , i , t, space, a, d
             // -----------------------------------------------------------------
             listOf(
-                // Left column: dedicated shift control (grey)
-                KeyItemC(
-                    backgroundColor = SURFACE_VARIANT,
-                    center =
-                        KeyC(
-                            display = KeyDisplay.IconDisplay(Icons.Outlined.ArrowDropUp),
-                            action = ToggleShiftMode(true),
-                            swipeReturnAction = ToggleCurrentWordCapitalization(true),
-                            color = MUTED,
-                        ),
-                    bottom =
-                        KeyC(
-                            display = KeyDisplay.IconDisplay(Icons.Outlined.ArrowDropDown),
-                            action = ToggleShiftMode(false),
-                            swipeReturnAction = ToggleCurrentWordCapitalization(false),
-                            color = MUTED,
-                        ),
-                ),
+                // Left column: text-edit control cluster (undo/redo/etc.), grey
+                SIDECAR_EDIT_KEY_ITEM,
 
                 // 'i' key with ' and ; and 'g' (right)
                 KeyItemC(
@@ -273,27 +271,11 @@ val KB_EN_SIDECAR_3X6_SHIFTED =
             ),
 
             // -----------------------------------------------------------------
-            // Row 1: [shift ctrl] , I , T, space, A, D
+            // Row 1: [edit ctrl] , I , T, space, A, D
             // -----------------------------------------------------------------
             listOf(
-                // Same shift control behaviour as main; explicitly grey
-                KeyItemC(
-                    backgroundColor = SURFACE_VARIANT,
-                    center =
-                        KeyC(
-                            display = KeyDisplay.IconDisplay(Icons.Outlined.ArrowDropUp),
-                            action = ToggleShiftMode(true),
-                            swipeReturnAction = ToggleCurrentWordCapitalization(true),
-                            color = MUTED,
-                        ),
-                    bottom =
-                        KeyC(
-                            display = KeyDisplay.IconDisplay(Icons.Outlined.ArrowDropDown),
-                            action = ToggleShiftMode(false),
-                            swipeReturnAction = ToggleCurrentWordCapitalization(false),
-                            color = MUTED,
-                        ),
-                ),
+                // Same edit control cluster in shifted layer
+                SIDECAR_EDIT_KEY_ITEM,
 
                 KeyItemC(
                     center = KeyC("I", size = LARGE),
